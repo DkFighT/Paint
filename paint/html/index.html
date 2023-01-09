@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paint</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="content">
+        <div class="menu_bar">
+            <select name="size" id="size" class="size">
+                <option value="1" selected>1px</option>
+                <option value="3">3px</option>
+                <option value="5">5px</option>
+                <option value="8">8px</option>
+            </select>
+            <div class="tools">
+                <div class="tools_block">
+                    <button class="tool" onclick="filling()"></button>
+                    <button class="tool" onclick=""></button>
+                    <button class="tool" onclick=""></button>
+                    <button class="tool" onclick=""></button>
+                    <button class="tool" onclick=""></button>
+                    <button class="tool" onclick=""></button>
+                </div>
+                <span class="helpfull_text">Tools</span>
+            </div>
+            <div class="colors">
+                <div class="colors_block">
+                    <button class="color" onclick="setColor(this)" style="background-color: #000000"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #7f7f7f"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #880015"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #ed1c24"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #ff7f27"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #fff200"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #22b14c"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #00a2e8"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #3f48cc"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #a349a4"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #ffffff"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #c3c3c3"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #b97a57"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #ffaec9"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #ffc90e"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #efe4b0"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #b5e61d"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #99d9ea"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #7092be"></button>
+                    <button class="color" onclick="setColor(this)" style="background-color: #c8bfe7"></button>
+                </div>
+                <span class="helpfull_text">Colors</span>
+            </div>
+            <div class="clear_field" onclick="clearField()">Clear</div>
+        </div>
+        <div class="field" id="page">
+            <canvas id="field"></canvas>
+        </div>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+</html>

@@ -7,6 +7,9 @@ canvas.setAttribute('height', `${pageY}px`)
 var ctx = canvas.getContext('2d');
 ctx.beginPath();
 ctx.moveTo(0, 0);
+ctx.beginPath();
+ctx.fillStyle = 'white';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 var brush_size = document.getElementById('size');
 var colors = document.getElementsByClassName('color');
@@ -25,9 +28,11 @@ function clearField(){
     ctx.beginPath();
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    cPush();
 }
 function filling(){
     ctx.fill();
+    cPush();
 }
 
 function changeBrushSize(){
@@ -66,38 +71,122 @@ canvas.addEventListener('mousedown', (event) => {
     let y = event.clientY - 100;
     newPos(x, y);
 })
+canvas.addEventListener('mouseup', (event)=>{
+    cPush();
+})
 
-
-
-var keys = {37: 1, 38: 1, 39: 1, 40: 1};
-
-function preventDefault(e) {
-  e.preventDefault();
+var cPushArray = new Array();
+var cStep = -1;
+	
+function cPush() {
+    cStep++;
+    if (cStep < cPushArray.length) { cPushArray.length = cStep; }
+    cPushArray.push(canvas.toDataURL("image/png"));
+    console.log('saved!');
 }
 
-function preventDefaultForScrollKeys(e) {
-  if (keys[e.keyCode]) {
-    preventDefault(e);
-    return false;
-  }
+function cUndo() {
+    if (cStep > 0) {
+        cStep--;
+        let canvasPic = new Image();
+        canvasPic.src = cPushArray[cStep];
+        canvasPic.onload = () => { ctx.drawImage(canvasPic, 0, 0); }
+        console.log('undo');
+    }
 }
 
-// modern Chrome requires { passive: false } when adding event
-var supportsPassive = false;
-try {
-  window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
-    get: function () { supportsPassive = true; } 
-  }));
-} catch(e) {}
-
-var wheelOpt = supportsPassive ? { passive: false } : false;
-var wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel';
-
-// call this to Disable
-function disableScroll() {
-  window.addEventListener('DOMMouseScroll', preventDefault, false); // older FF
-  window.addEventListener(wheelEvent, preventDefault, wheelOpt); // modern desktop
-  window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
-  window.addEventListener('keydown', preventDefaultForScrollKeys, false);
+function cRedo() {
+    if (cStep < cPushArray.length-1) {
+        cStep++;
+        let canvasPic = new Image();
+        canvasPic.src = cPushArray[cStep];
+        canvasPic.onload = () => { ctx.drawImage(canvasPic, 0, 0); }
+        console.log('redo');
+    }
 }
-disableScroll();
+
+let hor_flag = false;
+let vert_flag = false;
+function rotate_hor(){
+    if(!hor_flag){
+        canvas.style.transform = 'rotateX(180deg)';
+        hor_flag = true;
+    }
+    else{
+        canvas.style.transform = 'rotateX(0deg)';
+        hor_flag = false;
+    } 
+}
+function rotate_vert(){
+    if(!vert_flag){
+        canvas.style.transform = 'rotateY(180deg)';
+        vert_flag = true;
+    }
+    else{
+        canvas.style.transform = 'rotateY(0deg)';
+        vert_flag = false;
+    } 
+}
+
+// let scale_active = true;
+// function check_scale_active(){
+//     if(scale_active){
+//         plus_scale();
+//         scale_active = false;
+//     }
+//     else{
+//         plus_scale();
+//         scale_active = true;
+//     }
+// }
+// function plus_scale(){
+//         window.addEventListener('mousemove', function abc(event) {
+//             let x = event.clientX;
+//             let y = event.clientY - 100;
+//             check_mouse_position(x, y);
+//             if(!scale_active){
+//                 window.removeEventListener('mousemove', abc);
+//                 canvas.style.transform = 'scale(1)';
+//             } 
+//         });
+// }   
+
+
+function check_mouse_position(x, y){
+    if(x < canvas.width / 3 && y < canvas.height / 3){
+        canvas.style.transformOrigin = 'top left';
+        canvas.style.transform = 'scale(2)';
+    }
+    else if(x > canvas.width / 3 && x < canvas.width - canvas.width / 3 && y < canvas.height / 3){
+        canvas.style.transformOrigin = 'top';
+        canvas.style.transform = 'scale(2)';
+    }
+    else if(x < canvas.width && x > canvas.width - canvas.width / 3 && y < canvas.height / 3){
+        canvas.style.transformOrigin = 'top right';
+        canvas.style.transform = 'scale(2)';
+    }
+    else if(x < canvas.width / 3 && y < canvas.height - canvas.height / 3){
+        canvas.style.transformOrigin = 'left';
+        canvas.style.transform = 'scale(2)';
+    }
+    else if(x > canvas.width / 3 && x < canvas.width - canvas.width / 3 && y < canvas.height - canvas.height / 3){
+        canvas.style.transformOrigin = 'center';
+        canvas.style.transform = 'scale(2)';
+    }
+    else if(x < canvas.width && x > canvas.width - canvas.width / 3 && y < canvas.height - canvas.height / 3){
+        canvas.style.transformOrigin = 'right';
+        canvas.style.transform = 'scale(2)';
+    }
+    else if(x < canvas.width / 3 && y < canvas.height){
+        canvas.style.transformOrigin = 'bottom left';
+        canvas.style.transform = 'scale(2)';
+    }
+    else if(x > canvas.width / 3 && x < canvas.width - canvas.width / 3 && y < canvas.height){
+        canvas.style.transformOrigin = 'bottom';
+        canvas.style.transform = 'scale(2)';
+    }
+    else if(x < canvas.width && x > canvas.width - canvas.width / 3 && y < canvas.height){
+        canvas.style.transformOrigin = 'bottom right';
+        canvas.style.transform = 'scale(2)';
+    }
+}
